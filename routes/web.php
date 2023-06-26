@@ -13,6 +13,3 @@ Route::post('/loan-eligibility', [LoanEligibilityController::class, 'checkEligib
 
 // Route for displaying the EMI calculator form
 Route::get('/emi-calculator', [LoanEligibilityController::class, 'showEmiForm'])->name('emi-calculator.form');
-
-// Route for calculating the EMI
-Route::post('/emi-calculator', [LoanEligibilityController::class, 'calculateEMI'])->name('emi-calculator.calculate');

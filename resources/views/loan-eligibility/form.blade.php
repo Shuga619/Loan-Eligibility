@@ -8,113 +8,157 @@
     @vite('resources/css/app.css')
 </head>
 <body>
-<form method="POST" action="{{ route('loan-eligibility.check') }}" class="max-w-md mx-auto p-4 shadow-lg rounded mt-5">
-    @csrf
-    <h1 class="text-2xl font-bold mb-4">Loan Eligibility Form</h1>
-    <div class="grid grid-cols-2 gap-4">
-    <div class="col-span-2">
-    <label for="loan_type" class="block font-bold mb-1">Types of Loan</label>
-    <select id="loan_type" name="loan_type" class="w-full p-2 border border-gray-300 rounded">
-        <option value="Employee/Consumer Loan">Employee/Consumer Loan</option>
-        <option value="Standard Education Loan">Standard Education Loan</option>
-        <option value="EducAid">EducAid</option>
-        <option value="Housing Loan">Housing Loan</option>
-        <option value="Transport Loan">Transport Loan</option>
-        <option value="Personal Loan">Personal Loan</option>
-        <option value="Loan to Purchase Share">Loan to Purchase Share</option>
-        <option value="Loan Against Fix Deposit">Loan Against Fix Deposit</option>
-    </select>
+    <div class="container">
+    
+        <div class="form-container text-sm"> 
+          <form method="POST" action="{{ route('loan-eligibility.check') }}" id="loanEligibilityForm">
+          <h1 class="form-title">Loan Eligibility Form</h1>
+            @csrf
+            <div class="grid grid-cols-2 gap-4">
+                <div class="form-field">
+                    <label for="loan_type" class="form-label">Types of Loan:</label>
+                    <select id="loan_type" name="loan_type" class="form-select">
+                        <option value="Employee/Consumer Loan">Employee/Consumer Loan</option>
+                        <option value="Standard Education Loan">Standard Education Loan</option>
+                        <option value="EducAid">EducAid</option>
+                        <option value="Housing Loan">Housing Loan</option>
+                        <option value="Transport Loan">Transport Loan</option>
+                        <option value="Personal Loan">Personal Loan</option>
+                        <option value="Loan to Purchase Share">Loan to Purchase Share</option>
+                        <option value="Loan Against Fix Deposit">Loan Against Fix Deposit</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="employment_type" class="form-label">Employment Type:</label>
+                    <select name="employment_type" id="employment_type" class="form-select">
+                        <option value="Government Employees">Government Employees</option>
+                        <option value="Armed Forces">Armed Forces</option>
+                        <option value="Government Corporations">Government Corporations</option>
+                        <option value="Listed Companies">Listed Companies</option>
+                        <option value="NGOs">NGOs</option>
+                        <option value="International Organizations">International Organizations</option>
+                        <option value="Monastic Body">Monastic Body</option>
+                        <option value="Private Companies Employee (Not Listed)">Private Companies (Not Listed)</option>
+                        <option value="Contract Employees (Management Level)">Contract Employees (Management Level)</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="age" class="form-label">Age (Years):</label>
+                    <input type="number" id="age" name="age" min="18" required class="form-input">
+                </div>
+                <div class="form-field">
+                    <label for="net_monthly_income" class="form-label">Net Monthly Income (Nu):</label>
+                    <input type="number" name="net_monthly_income" id="net_monthly_income" required class="form-input">
+                </div>
+                <div class="form-field">
+                    <label for="loan_amount" class="form-label">Loan Amount (Nu):</label>
+                    <input type="number" name="loan_amount" id="loan_amount" required class="form-input">
+                </div>
+                <div class="form-field flex items-center mb-4">
+                    <label class="form-label">Interest Rate (%):</label>
+                    <div class="form-radio-label">
+                        <input type="radio" name="interest_rate" value="11" required>
+                        <span>Fixed Rate (11%)</span>
+                    </div>
+                    <div class="form-radio-label">
+                        <input type="radio" name="interest_rate" value="9.5" required>
+                        <span>Floating Rate (9.5%)</span>
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label for="loan_term" class="form-label">Loan Term (Months):</label>
+                    <input type="number" name="loan_term" id="loan_term" max="60" required class="form-input">
+                </div>
+                <div id="work_experience_container" class="form-field" style="display: none;">
+                    <label for="work_experience" class="form-label">Work Experience:</label>
+                    <select name="work_experience" id="work_experience" class="form-select">
+                        <!-- Options -->
+                    </select>
+                </div>
+            </div>
+            <div class="form-field">
+                <button type="submit" class="form-submit-button">Check Eligibility</button>
+                </div>
+            </form>
+            <div id="resultContainer" class="result-container hidden"></div>
+        </div>
+            
     </div>
-        <div>
-            <label for="employment_type" class="block font-bold mb-1">Employment Type:</label>
-            <select name="employment_type" id="employment_type" class="w-full p-2 border border-gray-300 rounded">
-                <option value="Government Employees">Government Employees</option>
-                <option value="Armed Forces">Armed Forces</option>
-                <option value="Government Corporations">Government Corporations</option>
-                <option value="Listed Companies">Listed Companies</option>
-                <option value="NGOs">NGOs</option>
-                <option value="International Organizations">International Organizations</option>
-                <option value="Monastic Body">Monastic Body</option>
-                <option value="Private Companies Employee (Not Listed)">Private Companies (Not Listed)</option>
-                <option value="Contract Employees (Management Level)">Contract Employees (Management Level)</option>
-            </select>
-        </div>
-        <div>
-            <label for="age" class="block font-bold mb-1">Age:</label>
-            <input type="number" id="age" name="age" min="18" required class="w-full p-2 border border-gray-300 rounded">
-        </div>
-        <div>
-            <label for="net_monthly_income" class="block font-bold mb-1">Net Monthly Income:</label>
-            <input type="number" name="net_monthly_income" id="net_monthly_income" required class="w-full p-2 border border-gray-300 rounded">
-        </div>
-        <div>
-            <label for="loan_amount" class="block font-bold mb-1">Loan Amount (in Nu):</label>
-            <input type="number" name="loan_amount" id="loan_amount" required class="w-full p-2 border border-gray-300 rounded">
-        </div>
-        <div>
-            <label for="interest_rate" class="block font-bold mb-1">Interest Rate:</label>
-            <input type="number" name="interest_rate" id="interest_rate" required class="w-full p-2 border border-gray-300 rounded">
-        </div>
-        <div>
-            <label for="loan_term" class="block font-bold mb-1">Loan Term (in months):</label>
-            <input type="number" name="loan_term" id="loan_term" max="60" required class="w-full p-2 border border-gray-300 rounded">
-        </div>
-        <div id="work_experience_container" class="col-span-2" style="display: none;">
-            <label for="work_experience" class="block font-bold mb-1">Work Experience:</label>
-            <select name="work_experience" id="work_experience" class="w-full p-2 border border-gray-300 rounded">
-                <!-- options -->
-            </select>
-        </div>
-    </div>
-    <div class="mt-4">
-        <button type="submit" class="hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">Check Eligibility</button>
-    </div>
-</form>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Get the interest rate radio buttons
+    var fixedRateRadio = document.querySelector('input[value="11"]');
+    var floatingRateRadio = document.querySelector('input[value="9.5"]');
 
-<script>
-    // Map employment types to their corresponding work experience options
+    // Get the labels for fixed and floating rate
+    var fixedRateLabel = document.querySelector('input[value="11"] + span');
+    var floatingRateLabel = document.querySelector('input[value="9.5"] + span');
+
+    // Add click event listeners to the labels
+    fixedRateLabel.addEventListener("click", function () {
+        fixedRateRadio.checked = true;
+    });
+
+    floatingRateLabel.addEventListener("click", function () {
+        floatingRateRadio.checked = true;
+    });
+});
+
+    document.getElementById('loanEligibilityForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting
+
+        var form = this;
+        var formData = new FormData(form);
+
+        // Send a POST request to the server with the form data
+        fetch(form.action, {
+            method: form.method,
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            // Update the result container with the received data
+            document.getElementById('resultContainer').innerHTML = data;
+            document.getElementById('resultContainer').classList.remove('hidden'); // Show the result container
+        
+            var formContainer = document.querySelector('.form-container');
+        formContainer.style.width = '800px';
+        })
+        .catch(error => console.error('Error:', error));
+    });
     var workExperienceOptions = {
-        'Government Employees': ['On probation period', 'After probation period till 3 years', '3 years and above'],
-        'Armed Forces': ['On probation period', 'After probation period till 3 years', '3 years and above'],
-        'Government Corporations': ['On probation period', 'After probation period till 3 years', '3 years and above'],
-        'Listed Companies': ['On probation period', 'After probation period till 3 years', '3 years and above'],
-        'NGOs': ['On probation period', 'After probation period till 3 years', '3 years and above'],
-        'International Organizations': ['On probation period', 'After probation period till 3 years', '3 years and above'],
-        'Monastic Body': ['On probation period', 'After probation period till 3 years', '3 years and above'],
-        'Private Companies Employee (Not Listed)': ['After probation period till 3 years', '3 years till 5 years', '5 years and above']
-    };
+            'Government Employees': ['On probation period', 'After probation period till 3 years', '3 years and above'],
+            'Armed Forces': ['On probation period', 'After probation period till 3 years', '3 years and above'],
+            'Government Corporations': ['On probation period', 'After probation period till 3 years', '3 years and above'],
+            'Listed Companies': ['On probation period', 'After probation period till 3 years', '3 years and above'],
+            'NGOs': ['On probation period', 'After probation period till 3 years', '3 years and above'],
+            'International Organizations': ['On probation period', 'After probation period till 3 years', '3 years and above'],
+            'Monastic Body': ['On probation period', 'After probation period till 3 years', '3 years and above'],
+            'Private Companies Employee (Not Listed)': ['After probation period till 3 years', '3 years till 5 years', '5 years and above']
+        };
 
-    // Function to update the work experience options based on the selected employment type
-    function updateWorkExperienceOptions() {
-        var employmentType = document.getElementById('employment_type').value;
-        var workExperienceContainer = document.getElementById('work_experience_container');
-        var workExperienceSelect = document.getElementById('work_experience');
+        function updateWorkExperienceOptions() {
+            var employmentType = document.getElementById('employment_type').value;
+            var workExperienceContainer = document.getElementById('work_experience_container');
+            var workExperienceSelect = document.getElementById('work_experience');
 
-        // Clear previous options
-        workExperienceSelect.innerHTML = '';
+            workExperienceSelect.innerHTML = '';
 
-        // Add new options based on the selected employment type
-        var options = workExperienceOptions[employmentType];
-        for (var i = 0; i < options.length; i++) {
-            var option = document.createElement('option');
-            option.text = options[i];
-            option.value = options[i];
-            workExperienceSelect.appendChild(option);
+            var options = workExperienceOptions[employmentType];
+            if (options && options.length > 0) {
+                for (var i = 0; i < options.length; i++) {
+                    var option = document.createElement('option');
+                    option.text = options[i];
+                    option.value = options[i];
+                    workExperienceSelect.appendChild(option);
+                }
+                workExperienceContainer.style.display = 'block';
+            } else {
+                workExperienceContainer.style.display = 'none';
+            }
         }
-
-        // Show or hide the work experience field based on the selected employment type
-        if (options && options.length > 0) {
-            workExperienceContainer.style.display = 'block';
-        } else {
-            workExperienceContainer.style.display = 'none';
-        }
-    }
-
-    // Update the work experience options initially
-    updateWorkExperienceOptions();
-
-    // Add an event listener to update the work experience options whenever the employment type is changed
-    document.getElementById('employment_type').addEventListener('change', updateWorkExperienceOptions);
-</script>
+        updateWorkExperienceOptions();
+        document.getElementById('employment_type').addEventListener('change', updateWorkExperienceOptions);   
+</script>    
 </body>
 </html>
