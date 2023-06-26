@@ -57,7 +57,7 @@
             const emiResult = document.getElementById('emi-result');
             emiResult.innerHTML = `
                 EMI: Nu. ${emi.toFixed(2)}<br>
-                Interest Payable: Nu.${interestPayable.toFixed(2)}<br>
+                Interest Payable: Nu. ${interestPayable.toFixed(2)}<br>
                 Total Payment: Nu. ${totalPayable.toFixed(2)}<br>
             `;
 

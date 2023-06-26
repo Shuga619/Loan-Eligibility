@@ -16,16 +16,16 @@
             @csrf
             <div class="grid grid-cols-2 gap-4">
                 <div class="form-field">
-                    <label for="loan_type" class="form-label">Types of Loan:</label>
+                    <label for="loan_type" class="form-label">Type of Loan:</label>
                     <select id="loan_type" name="loan_type" class="form-select">
                         <option value="Employee/Consumer Loan">Employee/Consumer Loan</option>
-                        <option value="Standard Education Loan">Standard Education Loan</option>
+                        <!-- <option value="Standard Education Loan">Standard Education Loan</option>
                         <option value="EducAid">EducAid</option>
                         <option value="Housing Loan">Housing Loan</option>
                         <option value="Transport Loan">Transport Loan</option>
                         <option value="Personal Loan">Personal Loan</option>
                         <option value="Loan to Purchase Share">Loan to Purchase Share</option>
-                        <option value="Loan Against Fix Deposit">Loan Against Fix Deposit</option>
+                        <option value="Loan Against Fix Deposit">Loan Against Fix Deposit</option> -->
                     </select>
                 </div>
                 <div class="form-field">
@@ -78,6 +78,7 @@
             </div>
             <div class="form-field">
                 <button type="submit" class="form-submit-button">Check Eligibility</button>
+                <button type="button" id="emiCalculatorButton" class="form-submit-button">Check Your EMI</button>
                 </div>
             </form>
             <div id="resultContainer" class="result-container hidden"></div>
@@ -85,6 +86,11 @@
             
     </div>
     <script>
+            document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("emiCalculatorButton").addEventListener("click", function () {
+            window.location.href = "/emi-calculator";
+        });
+    });
 document.addEventListener("DOMContentLoaded", function () {
     // Get the interest rate radio buttons
     var fixedRateRadio = document.querySelector('input[value="11"]');
