@@ -12,9 +12,12 @@
     
         <div class="form-container text-sm"> 
           <form method="POST" action="{{ route('loan-eligibility.check') }}" id="loanEligibilityForm">
-          <h1 class="form-title">Loan Eligibility Form</h1>
+          <div class="header">
+            <img src="../images/website-header-final.png" alt="EMI Calculator Header" class="header-image mx-auto">
+        </div>
+          <h1 class="form-title mx-auto">Loan Eligibility Form</h1>
             @csrf
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-2">
                 <div class="form-field">
                     <label for="loan_type" class="form-label">Type of Loan:</label>
                     <select id="loan_type" name="loan_type" class="form-select">
@@ -78,7 +81,7 @@
             </div>
             <div class="form-field">
                 <button type="submit" class="form-submit-button">Check Eligibility</button>
-                <button type="button" id="emiCalculatorButton" class="form-submit-button">Check Your EMI</button>
+                <p type="button" id="emiCalculatorButton" class="form-submit-button">Check Your EMI</p>
                 </div>
             </form>
             <div id="resultContainer" class="result-container hidden"></div>
@@ -128,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('resultContainer').classList.remove('hidden'); // Show the result container
         
             var formContainer = document.querySelector('.form-container');
-        formContainer.style.width = '800px';
+        formContainer.style.width = '1000px';
         })
         .catch(error => console.error('Error:', error));
     });

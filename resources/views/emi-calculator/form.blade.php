@@ -13,6 +13,9 @@
 <body>
     <div class="calculator-container">
         <div class="calculator">
+        <div class="header">
+            <img src="../images/website-header-final.png" alt="EMI Calculator Header" class="header-image mx-auto">
+        </div>
             <h2 class="calculator-title">EMI Calculator</h2>
             <form id="emi-form">
                 <div>
@@ -27,7 +30,10 @@
                     <label for="loan_term" class="form-label">Loan Term (Months):</label>
                     <input type="number" id="loan_term" name="loan_term" max="60" required class="form-input">
                 </div>
+            <div class="flex justify-between gap-2">
                 <button type="submit" class="form-button">Calculate EMI</button>
+                <button type="button" class="form-button" onclick="clearForm()">Clear</button>
+            </div>
             </form>
             <div id="emi-result" class="emi-result" style="display: none;"></div>
         </div>
@@ -36,9 +42,31 @@
         </div>
     </div>
     <script>
+            function clearForm() {
+            document.getElementById('loan_amount').value = '';
+            document.getElementById('interest_rate').value = '';
+            document.getElementById('loan_term').value = '';
+
+            document.getElementById('emi-result').style.display = 'none';
+            document.getElementById('amortization-table-container').style.display = 'none';
+
+            const calculatorContainer = document.querySelector('.calculator-container');
+            calculatorContainer.style.maxWidth = '400px';
+        }
+
         document.getElementById('emi-form').addEventListener('submit', function (e) {
             e.preventDefault();
+            function clearForm() {
+            document.getElementById('loan_amount').value = '';
+            document.getElementById('interest_rate').value = '';
+            document.getElementById('loan_term').value = '';
 
+            document.getElementById('emi-result').style.display = 'none';
+            document.getElementById('amortization-table-container').style.display = 'none';
+
+            const calculatorContainer = document.querySelector('.calculator-container');
+            calculatorContainer.style.maxWidth = 'none';
+}
             // Get form values
             const loanAmount = parseFloat(document.getElementById('loan_amount').value);
             const interestRate = parseFloat(document.getElementById('interest_rate').value);
