@@ -49,14 +49,38 @@
                     <label for="age" class="form-label">Age (Years):</label>
                     <input type="number" id="age" name="age" min="18" required class="form-input">
                 </div>
-                <div class="form-field">
+                <!-- <div class="form-field">
                     <label for="net_monthly_income" class="form-label">Net Monthly Income (Nu):</label>
-                    <input type="number" name="net_monthly_income" id="net_monthly_income" required class="form-input">
+                    <div class="input-with-hint">
+                        <input type="number" name="net_monthly_income" id="net_monthly_income" required class="form-input">
+                        <div class="hint-icon-container">
+                            <span class="hint-icon">ℹ️</span>
+                            <div class="hint-text font-semibold">The net income represents the remaining amount after various deductions, such as Provident Fund (PF), Taxes, Insurance payments, and Equated Monthly Installments (EMI) for loans from other banks, along with any other applicable deductions.</div>
+                        </div>
+                    </div>
                 </div>
+
+                
                 <div class="form-field">
                     <label for="loan_amount" class="form-label">Loan Amount (Nu):</label>
                     <input type="number" name="loan_amount" id="loan_amount" required class="form-input">
+                </div> -->
+                <div class="form-field">
+                    <label for="net_monthly_income" class="form-label">Net Monthly Income (Nu):</label>
+                    <div class="input-with-hint">
+                        <input type="text" name="net_monthly_income" id="net_monthly_income" required class="form-input" oninput="formatNumberInput(this)">
+                        <div class="hint-icon-container">
+                            <span class="hint-icon">ℹ️</span>
+                            <div class="hint-text font-semibold">The net income represents the remaining amount after various deductions, such as Provident Fund (PF), Taxes, Insurance payments, and Equated Monthly Installments (EMI) for loans from other banks, along with any other applicable deductions.</div>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="form-field">
+                    <label for="loan_amount" class="form-label">Loan Amount (Nu):</label>
+                    <input type="text" name="loan_amount" id="loan_amount" required class="form-input" oninput="formatNumberInput(this)">
+                </div>
+
                 <div class="form-field flex items-center mb-4">
                     <label class="form-label">Interest Rate (%):</label>
                     <div class="form-radio-label">
@@ -78,6 +102,37 @@
                         <!-- Options -->
                     </select>
                 </div>
+                <div class="form-field flex items-center space-x-1">
+                    <label class="form-field form-label">
+                        Employee Loan <br> with other banks:
+                    </label>
+
+                    <label class="form-radio-label cursor-pointer">
+                        <input type="radio" name="employee_loan" value="yes" required>
+                        <span>Yes</span>
+                    </label>
+                    
+                    <label class="form-radio-label cursor-pointer">
+                        <input type="radio" name="employee_loan" value="no" required>
+                        <span>No</span>
+                    </label>
+
+                    <div class="hint-icon-container">
+                        <span class="hint-icon">ℹ️</span>
+                        <div class="hint-text font-semibold">As long as your net monthly income is adequate, you are eligible to avail a loan from BNB, even if you have existing loans with other financial institutions.</div>
+                    </div>
+                </div>
+
+                <!-- <div class="form-field">
+                    <label for="cid_no" class="form-label">CID No:</label>
+                    <input type="text" id="cid_no" name="cid_no" required class="form-input">
+                </div> -->
+                <!-- Add this div for the sanctioned loan amount field -->
+                <!-- <div id="sanctionedLoanContainer" class="form-field" style="display: none;">
+                    <label for="sanctioned_loan" class="form-label">Sanctioned Loan Amount (Nu):</label>
+                    <input type="number" name="sanctioned_loan" id="sanctioned_loan" class="form-input">
+                </div> -->
+
             </div>
             <div class="form-field">
                 <button type="submit" class="form-submit-button">Check Eligibility</button>
@@ -111,14 +166,23 @@ document.addEventListener("DOMContentLoaded", function () {
     floatingRateLabel.addEventListener("click", function () {
         floatingRateRadio.checked = true;
     });
-});
+}); 
+function formatNumberInput(input) {
+        let value = input.value.replace(/,/g, ''); // Remove existing commas
+        let formattedValue = Number(value).toLocaleString(); // Add commas as thousand separators
+        input.value = formattedValue;
+    }
 
     document.getElementById('loanEligibilityForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the form from submitting
 
         var form = this;
         var formData = new FormData(form);
-
+        
+        // Remove commas from Net Monthly Income and Loan Amount fields before submitting
+        formData.set('net_monthly_income', formData.get('net_monthly_income').replace(/,/g, ''));
+        formData.set('loan_amount', formData.get('loan_amount').replace(/,/g, ''));
+        
         // Send a POST request to the server with the form data
         fetch(form.action, {
             method: form.method,

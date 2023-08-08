@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\LoanEligibility;
 use Illuminate\Http\Request;
 
+
 class LoanEligibilityController extends Controller
 {
     public function checkEligibility(Request $request)
-{
+{ 
     // Retrieve the input values from the request
     $employmentType = $request->input('employment_type');
     $age = $request->input('age');
@@ -17,12 +18,15 @@ class LoanEligibilityController extends Controller
     $interestRate = $request->input('interest_rate');
     $interestRate = $interestRate / (12 * 100); // one month interest
     $loanTerm = $request->input('loan_term');
+    $employeeLoan = $request->input('employee_loan');
+    $sanctionedLoan = $request->input('sanctioned_loan', 0); // Default to 0 if not provided
 
     // Initialize variables for loan eligibility
     $isEligible = false;
     $maximumLoanAmount = 0;
     $guarantorRequired = false;
     $reason = '';
+    $sanctionedLoan = null;
 
     if ($age >= 18) {
         // Government Employees, Armed Forces, Government Corporations, Listed Companies, NGOs, International Organizations, Monastic Body
@@ -82,9 +86,11 @@ class LoanEligibilityController extends Controller
                 $reason = 'Requested loan amount exceeded, maximum loan amount available for your employment type and work experience is Nu. ' . $maximumLoanAmount . '.';
             }
         }
-    } else {
-        $reason = 'Age must be at least 18 years.';
-    }
+        
+    } 
+    
+    // If the user is eligible for the loan, calculate the available loan amount
+    $availableLoanAmount = $isEligible ? $maximumLoanAmount - $sanctionedLoan : 0;
 
     // Prepare the data to be passed to the view
     $data = [
@@ -92,7 +98,7 @@ class LoanEligibilityController extends Controller
         'reason' => $reason,
     ];
     // Render the appropriate view based on eligibility
-    return view('loan-eligibility.result', compact('loanAmount', 'isEligible', 'maximumLoanAmount', 'guarantorRequired', 'minimumTakeaway', 'yourTakeaway', 'reason','yourInstallment'))->render();
+    return view('loan-eligibility.result', compact('loanAmount', 'isEligible', 'maximumLoanAmount', 'guarantorRequired', 'minimumTakeaway', 'yourTakeaway', 'reason','yourInstallment','sanctionedLoan'))->render();
 }
 
 

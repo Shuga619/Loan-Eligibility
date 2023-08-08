@@ -18,9 +18,9 @@
         </div>
             <h2 class="calculator-title">EMI Calculator</h2>
             <form id="emi-form">
-                <div>
+                <div class="form-field">
                     <label for="loan_amount" class="form-label">Loan Amount (Nu):</label>
-                    <input type="number" id="loan_amount" name="loan_amount" required class="form-input">
+                    <input type="text" name="loan_amount" id="loan_amount" required class="form-input" oninput="formatNumberInput(this)">
                 </div>
                 <div>
                     <label for="interest_rate" class="form-label">Bank Interest Rate (%):</label>
@@ -42,7 +42,13 @@
         </div>
     </div>
     <script>
-            function clearForm() {
+        function formatNumberInput(input) {
+            let value = input.value.replace(/,/g, ''); // Remove existing commas
+            let formattedValue = Number(value).toLocaleString(); // Add commas as thousand separators
+            input.value = formattedValue;
+        }
+
+        function clearForm() {
             document.getElementById('loan_amount').value = '';
             document.getElementById('interest_rate').value = '';
             document.getElementById('loan_term').value = '';
@@ -56,72 +62,67 @@
 
         document.getElementById('emi-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            function clearForm() {
-            document.getElementById('loan_amount').value = '';
-            document.getElementById('interest_rate').value = '';
-            document.getElementById('loan_term').value = '';
 
-            document.getElementById('emi-result').style.display = 'none';
-            document.getElementById('amortization-table-container').style.display = 'none';
-
-            const calculatorContainer = document.querySelector('.calculator-container');
-            calculatorContainer.style.maxWidth = 'none';
-}
             // Get form values
-            const loanAmount = parseFloat(document.getElementById('loan_amount').value);
+            const loanAmount = parseFloat(document.getElementById('loan_amount').value.replace(/,/g, '')); // Remove commas
             const interestRate = parseFloat(document.getElementById('interest_rate').value);
             const loanTerm = parseFloat(document.getElementById('loan_term').value);
 
             // Calculate EMI
             const monthlyInterest = interestRate / 100 / 12;
             const emi = (loanAmount * monthlyInterest * Math.pow(1 + monthlyInterest, loanTerm)) /
-                (Math.pow(1 + monthlyInterest, loanTerm) - 1);
+            (Math.pow(1 + monthlyInterest, loanTerm) - 1);
 
             // Calculate additional values
             const totalPayable = emi * loanTerm;
             const interestPayable = totalPayable - loanAmount;
 
             // Display result
+            function addCommasToNumber(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
             const emiResult = document.getElementById('emi-result');
             emiResult.innerHTML = `
-                EMI: Nu. ${emi.toFixed(2)}<br>
-                Interest Payable: Nu. ${interestPayable.toFixed(2)}<br>
-                Total Payment: Nu. ${totalPayable.toFixed(2)}<br>
+            EMI: Nu. ${addCommasToNumber(emi.toFixed(2))}<br>
+            Interest Payable: Nu. ${addCommasToNumber(interestPayable.toFixed(2))}<br>
+            Total Payment: Nu. ${addCommasToNumber(totalPayable.toFixed(2))}<br>
             `;
 
             if (emi < 0) {
-                emiResult.style.color = 'red';
+            emiResult.style.color = 'red';
             } else {
-                emiResult.style.color = 'green';
+            emiResult.style.color = 'green';
             }
+
             // Generate loan amortization schedule table
             const amortizationTableContainer = document.getElementById('amortization-table-container');
             const amortizationTable = document.getElementById('amortization-table');
             amortizationTable.innerHTML = `
-                                <tr>
-                                    <th>Month</th>
-                                    <th>Ending Balance(Nu)</th>
-                                    <th>Interest Paid(Nu)</th>
-                                    <th>Principal Paid(Nu)</th>
-                                    <th>Installment<br>(Nu)</th>
-                                </tr>
-                            `;
-            
+            <tr>
+                <th>Month</th>
+                <th>Ending Balance(Nu)</th>
+                <th>Interest Paid(Nu)</th>
+                <th>Principal Paid(Nu)</th>
+                <th>Installment<br>(Nu)</th>
+            </tr>
+            `;
+
             let balance = loanAmount;
             for (let month = 1; month <= loanTerm; month++) {
-                const interest = balance * monthlyInterest;
-                const principal = emi - interest;
-                balance -= principal;
+            const interest = balance * monthlyInterest;
+            const principal = emi - interest;
+            balance -= principal;
 
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${month}</td>
-                    <td>${balance.toFixed(2)}</td>
-                    <td>${interest.toFixed(2)}</td>
-                    <td>${principal.toFixed(2)}</td>
-                    <td>${emi.toFixed(2)}</td>
-                `;
-                amortizationTable.appendChild(row);
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${month}</td>
+                <td>${addCommasToNumber(balance.toFixed(2))}</td>
+                <td>${addCommasToNumber(interest.toFixed(2))}</td>
+                <td>${addCommasToNumber(principal.toFixed(2))}</td>
+                <td>${addCommasToNumber(emi.toFixed(2))}</td>
+            `;
+            amortizationTable.appendChild(row);
             }
 
             amortizationTableContainer.style.display = 'block';
@@ -130,5 +131,6 @@
             calculatorContainer.style.maxWidth = '900px';
         });
     </script>
+
 </body>
 </html>
