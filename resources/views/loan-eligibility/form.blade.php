@@ -47,7 +47,7 @@
                 </div>
                 <div class="form-field">
                     <label for="age" class="form-label">Age (Years):</label>
-                    <input type="number" id="age" name="age" min="18" required class="form-input">
+                    <input type="number" id="age" name="age" min="18" max="62" required class="form-input">
                 </div>
                 <!-- <div class="form-field">
                     <label for="net_monthly_income" class="form-label">Net Monthly Income (Nu):</label>

@@ -26,7 +26,6 @@ class LoanEligibilityController extends Controller
     $maximumLoanAmount = 0;
     $guarantorRequired = false;
     $reason = '';
-    $sanctionedLoan = null;
 
     if ($age >= 18) {
         // Government Employees, Armed Forces, Government Corporations, Listed Companies, NGOs, International Organizations, Monastic Body
@@ -74,6 +73,7 @@ class LoanEligibilityController extends Controller
         $yourTakeaway = $netMonthlyIncome - $emi;
         $yourTakeaway = round($yourTakeaway, 2);
         $yourInstallment = round($emi, 2);
+        $emi2 = ($maximumLoanAmount * $interestRate * pow(1 + $interestRate, $loanTerm)) / (pow(1 + $interestRate, $loanTerm) - 1);
 
         if ($loanAmount > 0 && $yourTakeaway >= $minimumTakeaway && $loanAmount <= $maximumLoanAmount) {
             $isEligible = true;
@@ -81,9 +81,9 @@ class LoanEligibilityController extends Controller
             if ($loanAmount <= 0) {
                 $reason = 'Loan amount must be greater than zero.';
             } elseif ($yourTakeaway < $minimumTakeaway) {
-                $reason = 'Your monthly income is not sufficient. Your monthly takeaway must be at least Nu.' . $minimumTakeaway . '.';
+                $reason = 'Your monthly income is not sufficient. Your monthly take-home pay must be at least Nu. ' . number_format($minimumTakeaway) . '.';
             } elseif ($loanAmount > $maximumLoanAmount) {
-                $reason = 'Requested loan amount exceeded, maximum loan amount available for your employment type and work experience is Nu. ' . $maximumLoanAmount . '.';
+                $reason = 'Requested loan amount exceeded, maximum loan amount available for your employment type and work experience is Nu. ' . number_format($maximumLoanAmount) . '.';
             }
         }
         
@@ -98,7 +98,7 @@ class LoanEligibilityController extends Controller
         'reason' => $reason,
     ];
     // Render the appropriate view based on eligibility
-    return view('loan-eligibility.result', compact('loanAmount', 'isEligible', 'maximumLoanAmount', 'guarantorRequired', 'minimumTakeaway', 'yourTakeaway', 'reason','yourInstallment','sanctionedLoan'))->render();
+    return view('loan-eligibility.result', compact('loanAmount', 'isEligible', 'maximumLoanAmount', 'guarantorRequired', 'minimumTakeaway', 'yourTakeaway', 'reason','yourInstallment','emi2'))->render();
 }
 
 

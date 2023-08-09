@@ -38,18 +38,12 @@
 <!-- New section to display the available loan amount -->
 
 @else
-<p class="mb-4 text-red-600 font-bold">Sorry, you are not eligible for the requested loan.</p>
+<p class="mb-4 text-red-600 font-bold">Sorry, you are not eligible for the requested loan of Nu. {{number_format($loanAmount)}}</p>
 <div class="p-4 border border-gray-300 shadow-md font-sans font-semibold">
     <h2 class="semi-bold">Reason:</h2>
     <p class="semi-bold">{{ $reason }}</p>
-    <!-- @if(isset($sanctionedLoan))
-    @php
-    $availableLoanAmount = $maximumLoanAmount - $sanctionedLoan;
-    @endphp
-    <p class="mt-4">Existing Loan Amount: Nu. {{ number_format($sanctionedLoan) }}</p>
-    <p class="mt-4">Final Loan Disbursement : Nu. {{ number_format($availableLoanAmount) }}</p>
-
-    @endif -->
+    <p>But you are eligible for: Nu. <span class="amount"> {{number_format($maximumLoanAmount)}} </span> </p>
+    <p>Monthly Installment/EMI: Nu. <span class="amount">{{number_format($emi2)}} </span></p>
 </div>
 @endif
 <br>
